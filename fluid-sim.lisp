@@ -14,6 +14,7 @@
 
 (defmethod advance-simulation (sim dt)
   (declare (ignorable sim dt))
+  (format t "Advancing ~a by ~a.~%" sim dt)
   sim)
 
 (defgeneric to-png (sim file-name)
@@ -26,14 +27,26 @@
       (sp:write-png png file-name))))
 
 
-(defun run-simulation (output-directory duration &optional (fps 30))
+(defun run-simulation (output-directory
+                       &key
+                         (simulation (make-instance 'fluid-simulation))
+                         (duration 10.0)
+                         (fps 30)
+                         (initial-frame-number 0))
+  "Animate the simulation."
+  (declare (type fluid-simulation simulation)
+           (type simple-string output-directory)
+           (type double-float duration)
+           (type fixnum fps initial-frame-number))
+
   (let* ((real-dir-name (ju:fix-directory output-directory))
-         (frame-count (* fps duration))
-         (dt (/ 1.0 fps))
-         (sim (make-instance 'fluid-simulation)))
+         (frame-count (truncate (* fps duration)))
+         (dt (/ 1.0 fps)))
 
     (dotimes (frame frame-count)
-      (let ((output-file-name (format nil "~aframe~8,'0d.png" real-dir-name frame)))
-        (advance-simulation sim dt)
-        (to-png sim output-file-name)))))
-
+      (let* ((frame-number (+ initial-frame-number frame))
+             (output-file-name (format nil "~aframe~8,'0d.png" real-dir-name frame-number)))
+        (advance-simulation simulation dt)
+        (format t "Creating frame ~a...~%" frame-number)
+        (to-png simulation output-file-name))))
+  simulation)

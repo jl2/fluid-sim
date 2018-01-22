@@ -4,5 +4,6 @@
 
 
 (defpackage #:fluid-sim
-  (:use #:cl #:alexandria #:3d-vectors  #:3d-matrices #:simple-png)
-  (:export #:run-simulation))
+  (:use #:cl #:alexandria #:3d-vectors  #:3d-matrices)
+  (:export #:fluid-simulation
+           #:run-simulation))
