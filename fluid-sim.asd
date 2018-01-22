@@ -9,6 +9,10 @@
   :license  "ISC (BSD-like)"
   :version "0.0.1"
   :serial t
-  :depends-on (#:png #:alexandria)
+  :depends-on (#:simple-png 
+               #:j-utils
+               #:alexandria
+               #:3d-vectors
+               #:3d-matrices)
   :components ((:file "package")
                (:file "fluid-sim")))
